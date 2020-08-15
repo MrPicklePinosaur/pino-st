@@ -132,7 +132,7 @@ unsigned int defaultbg = 0;
 static unsigned int defaultcs = 256;
 static unsigned int defaultrcs = 257;
 
-unsigned int const currentBg = 6, buffSize = 2048;
+unsigned int const currentBg = 0, buffSize = 2048;
 /// [Vim Browse] Colors for search results currently on screen.
 unsigned int const highlightBg = 9, highlightFg = 15;
 char const wDelS[] = "!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~", wDelL[] = " \t";
