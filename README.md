@@ -2,10 +2,10 @@
 This is pinosaur's patched fork of st from suckless.
 
 The following patches are applied:
-- [xresources]{https://st.suckless.org/patches/xresources/}
-- [blinking cursor]{https://st.suckless.org/patches/blinking\_cursor/}
-- [vim browse]{https://st.suckless.org/patches/vim\_browse/}
-- [w3m]{https://st.suckless.org/patches/w3m/}
+- [xresources](https://st.suckless.org/patches/xresources/)
+- [blinking cursor](https://st.suckless.org/patches/blinking\_cursor/)
+- [vim browse](https://st.suckless.org/patches/vim\_browse/)
+- [w3m](https://st.suckless.org/patches/w3m/)
 
 ### Requirements
 In order to build st you need the Xlib header files.
