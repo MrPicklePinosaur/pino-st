@@ -5,6 +5,7 @@
 #include <locale.h>
 #include <signal.h>
 #include <sys/select.h>
+#include <sys/wait.h>
 #include <time.h>
 #include <unistd.h>
 #include <libgen.h>
@@ -74,6 +75,7 @@ static void zoom(const Arg *);
 static void zoomabs(const Arg *);
 static void zoomreset(const Arg *);
 static void ttysend(const Arg *);
+static void plumber(const Arg *);
 
 /* config.h for applying patches and the configuration. */
 #include "config.h"
@@ -196,10 +198,12 @@ static void selnotify(XEvent *);
 static void selclear_(XEvent *);
 static void selrequest(XEvent *);
 static void setsel(char *, Time);
+static void plumb(char *sel);
 static void mousesel(XEvent *, int);
 static void mousereport(XEvent *);
 static char *kmap(KeySym, uint);
 static int match(uint, uint);
+
 
 static void run(void);
 static void usage(void);
@@ -231,6 +235,7 @@ static void (*handler[LASTEvent])(XEvent *) = {
 };
 
 /* Globals */
+static int plumbsel;
 static DC dc;
 static XWindow xw;
 static XSelection xsel;
@@ -343,6 +348,12 @@ void
 ttysend(const Arg *arg)
 {
 	ttywrite(arg->s, strlen(arg->s), 1);
+}
+
+void
+plumber(const Arg *arg)
+{
+    plumb(xsel.primary);
 }
 
 int
@@ -696,6 +707,37 @@ void
 xsetsel(char *str)
 {
 	setsel(str, CurrentTime);
+}
+
+void
+plumbinit()
+{
+	for(plumbsel = 0; plumb_cmd[plumbsel]; plumbsel++);
+}
+
+void
+plumb(char *sel) {
+	if (sel == NULL)
+		return;
+	char cwd[PATH_MAX];
+	pid_t child;
+	if (subprocwd(cwd) != 0)
+		return;
+
+	plumb_cmd[plumbsel] = sel;
+
+	switch(child = fork()) {
+		case -1:
+			return;
+		case 0:
+			if (chdir(cwd) != 0)
+				exit(1);
+			if (execvp(plumb_cmd[0], plumb_cmd) == -1)
+				exit(1);
+			exit(0);
+		default:
+			waitpid(child, NULL, 0);
+	}
 }
 
 void
@@ -2130,6 +2172,7 @@ main(int argc, char *argv[])
 	} ARGEND;
 
 run:
+	plumbinit();
 	if (argc > 0) /* eat all remaining arguments */
 		opt_cmd = argv;
 

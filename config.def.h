@@ -258,6 +258,7 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ MODKEY,               XK_c,           normalMode,     {.i =  0} },
 	{ ControlMask,          XK_Return,      newterm,        {.i =  0} },
+    { ControlMask,          XK_space,       plumber,        {.i =  0} },
 };
 
 /*
@@ -529,3 +530,9 @@ static char ascii_printable[] =
 	" !\"#$%&'()*+,-./0123456789:;<=>?"
 	"@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
 	"`abcdefghijklmnopqrstuvwxyz{|}~";
+
+/*
+ * plumb_cmd is run on mouse button 3 click, with first NULL set to
+ * current selection and with cwd set to the cwd of the active shell
+ */
+static char *plumb_cmd[] = {"plumb", "-m", NULL, NULL};

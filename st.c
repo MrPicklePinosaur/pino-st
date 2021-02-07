@@ -28,6 +28,9 @@
 #elif defined(__FreeBSD__) || defined(__DragonFly__)
  #include <libutil.h>
 #endif
+#if defined(__OpenBSD__)
+ #include <sys/sysctl.h>
+#endif
 
 /* Arbitrary sizes */
 #define UTF_INVALID   0xFFFD
@@ -242,6 +245,22 @@ Line *buf = NULL;
 static TCursor c[3];
 static inline int rows() { return IS_SET(MODE_ALTSCREEN) ? term.row : buffSize;}
 static inline int rangeY(int i) { while (i < 0) i += rows(); return i % rows();}
+
+int
+subprocwd(char *path)
+{
+#if   defined(__linux)
+	if (snprintf(path, PATH_MAX, "/proc/%d/cwd", pid) < 0)
+		return -1;
+	return 0;
+#elif defined(__OpenBSD__)
+	size_t sz = PATH_MAX;
+	int name[3] = {CTL_KERN, KERN_PROC_CWD, pid};
+	if (sysctl(name, 3, path, &sz, 0, 0) == -1)
+		return -1;
+	return 0;
+#endif
+}
 
 ssize_t
 xwrite(int fd, const char *s, size_t len)
@@ -812,7 +831,7 @@ ttynew(char *line, char *cmd, char *out, char **args)
 		break;
 	default:
 #ifdef __OpenBSD__
-		if (pledge("stdio rpath tty proc", NULL) == -1)
+		if (pledge("stdio rpath tty proc ps exec", NULL) == -1)
 			die("pledge\n");
 #endif
 		close(s);
