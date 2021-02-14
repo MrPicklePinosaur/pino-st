@@ -6,6 +6,8 @@ The following patches are applied:
 - [blinking cursor](https://st.suckless.org/patches/blinking\_cursor/)
 - [vim browse](https://st.suckless.org/patches/vim\_browse/)
 - [w3m](https://st.suckless.org/patches/w3m/)
+- [newterm](https://st.suckless.org/patches/newterm/)
+- [plumb-keybind](https://gist.githubusercontent.com/MrPicklePinosaur/f393f660223f721b20da561e47c5ae07/raw/774e0339f53665e6a305f1aa69989d694b6cc674/st_simple_plumb_keybind.diff): modified rightclickplumb that allows a key binding to plumb
 
 ### Requirements
 In order to build st you need the Xlib header files.
