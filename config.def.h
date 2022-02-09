@@ -250,7 +250,7 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
-	{ ControlMask,          XK_n,           normalMode,     {.i =  0} },
+	{ Mod1Mask,             XK_c,           normalMode,     {.i =  0} },
 	{ Mod1Mask,             XK_Return,      newterm,        {.i =  0} }, // this would ideally be in dwm or sxhkd
     { ControlMask,          XK_space,       plumber,        {.i =  0} },
 };
